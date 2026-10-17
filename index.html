@@ -26,7 +26,7 @@
 </head>
 <body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col antialiased selection:bg-amber-500 selection:text-slate-900">
 
-  <!-- UST BANT -->
+  <!-- ÜST BANT -->
   <header class="bg-brand-card/95 backdrop-blur-md border-b border-slate-800 sticky top-0 z-50">
     <div class="max-w-md mx-auto px-4 py-3 flex items-center justify-between">
       <div class="flex items-center space-x-3">
@@ -47,17 +47,17 @@
     </div>
   </header>
 
-  <!-- ANA ICERIK -->
+  <!-- ANA İÇERİK -->
   <main class="flex-1 max-w-md w-full mx-auto p-4 flex flex-col justify-center">
 
-    <!-- 1. GIRIS KARTI -->
+    <!-- 1. GİRİŞ KARTI -->
     <section id="authSection" class="w-full my-auto space-y-4">
       <div class="bg-brand-card/80 backdrop-blur-xl rounded-3xl p-5 text-center shadow-2xl border border-slate-800">
         <div class="w-14 h-14 bg-amber-500/10 border border-amber-500/30 text-amber-400 rounded-2xl flex items-center justify-center mx-auto mb-2">
           <i class="fa-solid fa-graduation-cap text-2xl"></i>
         </div>
         <h2 class="text-lg font-black text-white" id="authSchoolTitle">Demet Eğitim Kurumları</h2>
-        <p class="text-[11px] text-slate-400 mt-0.5">Kurumsal Bilgi Sistemine Güvenli Giriş</p>
+        <p class="text-[11px] text-slate-400 mt-0.5">Kurumsal e-Okul Bilgi Sistemine Giriş</p>
       </div>
 
       <div class="bg-brand-card/80 backdrop-blur-xl rounded-3xl p-5 shadow-2xl border border-slate-800">
@@ -70,7 +70,7 @@
           </button>
         </div>
 
-        <!-- FORM: GIRIS -->
+        <!-- FORM: GİRİŞ -->
         <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-3">
           <div>
             <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Giriş Türü</label>
@@ -114,11 +114,11 @@
             </select>
           </div>
           <div>
-            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Ad Soyad (Öğrenci veya Veli)</label>
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Ad Soyad (Veli veya Öğretmen)</label>
             <input type="text" id="regFullName" required class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-xs text-slate-200" placeholder="Ad Soyad">
           </div>
           <div id="regStudentNameGroup">
-            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Öğrenci Adı Soyadı (Veli İçin)</label>
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Öğrenci Adı Soyadı</label>
             <input type="text" id="regStudentName" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-xs text-slate-200" placeholder="Öğrencinin Adı">
           </div>
           <div>
@@ -152,10 +152,10 @@
         <p class="text-xs text-slate-300 leading-relaxed" id="infoSchoolNotice">Sistem aktiftir.</p>
       </div>
 
-      <!-- VELI PANELİ -->
+      <!-- VELİ PANELİ -->
       <div id="viewStudent" class="dashboard-view hidden space-y-4">
         <div class="bg-brand-card/80 p-4 rounded-2xl border border-slate-800 shadow-xl">
-          <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Öğrenci Seçiniz:</p>
+          <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Öğrencinizi Seçiniz:</p>
           <div id="parentStudentSelector" class="flex flex-wrap gap-2"></div>
         </div>
 
@@ -182,18 +182,18 @@
 
           <div class="bg-brand-card/80 p-4 rounded-2xl border border-slate-800 shadow-xl">
             <h3 class="font-bold text-white text-xs border-b border-slate-800 pb-2 mb-3 flex items-center gap-2">
-              <i class="fa-solid fa-comments text-amber-400"></i> Öğretmen Değerlendirmeleri
+              <i class="fa-solid fa-comments text-amber-400"></i> Öğretmen & Admin Yorumları
             </h3>
             <div id="studentCommentsList" class="space-y-2 text-xs text-slate-300"></div>
           </div>
         </div>
       </div>
 
-      <!-- OGRETMEN PANELİ -->
+      <!-- ÖĞRETMEN PANELİ -->
       <div id="viewTeacher" class="dashboard-view hidden space-y-4">
         <div class="bg-brand-card/80 p-4 rounded-2xl border border-slate-800 shadow-xl">
           <h3 class="font-bold text-white text-xs border-b border-slate-800 pb-2 mb-3 flex items-center gap-2">
-            <i class="fa-solid fa-pen-to-square text-amber-400"></i> Bütün Öğrenciler & Not Girişi
+            <i class="fa-solid fa-pen-to-square text-amber-400"></i> Yoklama Alma & Not Giriş Paneli
           </h3>
           <div class="overflow-x-auto">
             <table class="w-full text-left text-xs">
@@ -213,8 +213,9 @@
         </div>
       </div>
 
-      <!-- ADMIN PANELİ -->
+      <!-- ADMİN PANELİ -->
       <div id="viewAdmin" class="dashboard-view hidden space-y-4">
+        <!-- Okul Ayarları -->
         <div class="bg-brand-card/80 p-4 rounded-2xl border border-slate-800 shadow-xl space-y-3">
           <h3 class="font-bold text-amber-400 text-xs border-b border-slate-800 pb-2 flex items-center gap-2">
             <i class="fa-solid fa-sliders"></i> Okul İsmi ve Duyuru Yönetimi
@@ -232,9 +233,10 @@
           </button>
         </div>
 
+        <!-- Onay Bekleyenler -->
         <div class="bg-brand-card/80 p-4 rounded-2xl border border-slate-800 shadow-xl">
           <h3 class="font-bold text-white text-xs border-b border-slate-800 pb-2 mb-3 flex items-center gap-2">
-            <i class="fa-solid fa-user-check text-amber-400"></i> Kayıt Başvurusu Onayları
+            <i class="fa-solid fa-user-check text-amber-400"></i> Onay Bekleyen Başvurular
           </h3>
           <div class="overflow-x-auto">
             <table class="w-full text-left text-xs">
@@ -243,11 +245,31 @@
           </div>
         </div>
 
+        <!-- Öğrenciler ve Yorum Yapma -->
+        <div class="bg-brand-card/80 p-4 rounded-2xl border border-slate-800 shadow-xl">
+          <h3 class="font-bold text-white text-xs border-b border-slate-800 pb-2 mb-3 flex items-center gap-2">
+            <i class="fa-solid fa-graduation-cap text-amber-400"></i> Öğrenci Yönetimi & Yorum Ekleme
+          </h3>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-900 text-slate-400 uppercase text-[9px] font-bold">
+                <tr>
+                  <th class="py-2 px-2">Öğrenci</th>
+                  <th class="py-2 px-1">Veli Kullanıcı</th>
+                  <th class="py-2 px-1 text-center">İşlem</th>
+                </tr>
+              </thead>
+              <tbody id="adminStudentsTable" class="divide-y divide-slate-800"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Şifre Yönetimi -->
         <div class="bg-brand-card/80 p-4 rounded-2xl border border-slate-800 shadow-xl">
           <h3 class="font-bold text-white text-xs border-b border-slate-800 pb-1 flex items-center gap-2">
-            <i class="fa-solid fa-users-gear text-amber-400"></i> Sistemdeki Kişiler ve Şifre Yönetimi
+            <i class="fa-solid fa-users-gear text-amber-400"></i> Sistemdeki Kişiler & Şifre Yönetimi
           </h3>
-          <p class="text-[10px] text-slate-400 mb-3">Kişileri görebilir, şifrelerini inceleyebilir ve silebilirsiniz.</p>
+          <p class="text-[10px] text-slate-400 mb-3">Sistemdeki tüm şifreler sadece burada görülür.</p>
           <div class="overflow-x-auto">
             <table class="w-full text-left text-xs">
               <thead class="bg-slate-900 text-slate-400 uppercase text-[9px] font-bold">
@@ -343,8 +365,8 @@
       const username = document.getElementById('loginUsername').value.trim();
       const password = document.getElementById('loginPassword').value.trim();
 
-      const users = getUsers();
-      const user = users.find(u => u.username.toLowerCase() === username.toLowerCase() && u.password === password && u.role === role);
+      const usersList = getUsers();
+      const user = usersList.find(u => u.username.toLowerCase() === username.toLowerCase() && u.password === password && u.role === role);
 
       if (!user) { alert("Hatalı kullanıcı adı, şifre veya giriş türü!"); return; }
       if (!user.approved) { alert("Hesabınız Admin tarafından henüz onaylanmamış!"); return; }
@@ -361,10 +383,10 @@
       const subject = document.getElementById('regSubject').value;
       const studentName = document.getElementById('regStudentName').value.trim();
 
-      const users = getUsers();
-      if (users.some(u => u.username === username)) { alert("Bu kullanıcı adı alınmış!"); return; }
+      const usersList = getUsers();
+      if (usersList.some(u => u.username === username)) { alert("Bu kullanıcı adı alınmış!"); return; }
 
-      users.push({ 
+      usersList.push({ 
         username, 
         password, 
         name, 
@@ -373,7 +395,7 @@
         studentName: role === 'student' ? (studentName || name + ' Çocuğu') : null,
         approved: false 
       });
-      saveUsers(users);
+      saveUsers(usersList);
       alert("Başvurunuz alındı. Admin onayladıktan sonra giriş yapabilirsiniz.");
       switchAuthTab('login');
       document.getElementById('registerForm').reset();
@@ -411,20 +433,20 @@
     }
 
     function renderStudentParentView() {
-      const students = getStudents().filter(s => s.parentUsername === currentUser.username);
+      const studentsList = getStudents().filter(s => s.parentUsername === currentUser.username);
       const container = document.getElementById('parentStudentSelector');
       container.innerHTML = '';
 
-      if (students.length === 0) {
+      if (studentsList.length === 0) {
         container.innerHTML = `<p class="text-xs text-slate-400">Bağlı öğrenci bulunamadı.</p>`;
         return;
       }
 
-      if (!selectedStudentId || !students.some(s => s.id === selectedStudentId)) {
-        selectedStudentId = students[0].id;
+      if (!selectedStudentId || !studentsList.some(s => s.id === selectedStudentId)) {
+        selectedStudentId = studentsList[0].id;
       }
 
-      students.forEach(st => {
+      studentsList.forEach(st => {
         container.innerHTML += `
           <button onclick="selectedStudentId='${st.id}'; renderStudentParentView();" class="px-3 py-1.5 rounded-xl text-xs font-bold ${st.id === selectedStudentId ? 'bg-amber-500 text-slate-950' : 'bg-slate-900 text-slate-300 border border-slate-800'}">
             👨‍🎓 ${st.name}
@@ -464,18 +486,18 @@
     }
 
     function renderTeacherView() {
-      const students = getStudents();
+      const studentsList = getStudents();
       const gradesData = getGrades();
       const subject = currentUser.subject || 'Genel';
       const tbody = document.getElementById('teacherStudentsTable');
       tbody.innerHTML = '';
 
-      if (students.length === 0) {
+      if (studentsList.length === 0) {
         tbody.innerHTML = `<tr><td colspan="6" class="py-3 text-center text-slate-500">Kayıtlı öğrenci yok.</td></tr>`;
         return;
       }
 
-      students.forEach(student => {
+      studentsList.forEach(student => {
         const studentGrades = gradesData[student.id] || [];
         let g = studentGrades.find(x => x.subject === subject) || { subject, exam1: 0, exam2: 0, verbal: 0 };
 
@@ -505,7 +527,7 @@
       if (!item) { item = { subject, exam1: 0, exam2: 0, verbal: 0, ozursuz: 0 }; grades[id].push(item); }
       item.ozursuz = (item.ozursuz || 0) + 1;
       saveGrades(grades);
-      alert("Öğrenciye +1 Devamsızlık işlendi.");
+      alert("Öğrenciye +1 Devamsızlık eklendi.");
     }
 
     function saveTeacherGrade(id) {
@@ -546,12 +568,13 @@
       document.getElementById('adminInputSchoolName').value = school.name;
       document.getElementById('adminInputSchoolNotice').value = school.notice;
 
-      const users = getUsers();
+      // Bekleyenler Listesi
+      const usersList = getUsers();
       const pendingTbody = document.getElementById('adminPendingTable');
-      const pendingUsers = users.filter(u => !u.approved);
+      const pendingUsers = usersList.filter(u => !u.approved);
 
       pendingTbody.innerHTML = pendingUsers.length === 0 
-        ? `<tr><td colspan="2" class="py-2 text-center text-slate-500">Bekleyen üye yok.</td></tr>`
+        ? `<tr><td colspan="2" class="py-2 text-center text-slate-500">Bekleyen başvuru yok.</td></tr>`
         : pendingUsers.map(u => `
           <tr>
             <td class="py-2 px-2 font-bold text-white">${u.name} (${u.role}${u.subject ? ' - ' + u.subject : ''})</td>
@@ -562,8 +585,24 @@
           </tr>
         `).join('');
 
+      // Öğrenci Yönetimi Tablosu
+      const studentsList = getStudents();
+      const adminStudentsTbody = document.getElementById('adminStudentsTable');
+      adminStudentsTbody.innerHTML = studentsList.length === 0
+        ? `<tr><td colspan="3" class="py-2 text-center text-slate-500">Kayıtlı öğrenci yok.</td></tr>`
+        : studentsList.map(s => `
+          <tr>
+            <td class="py-2 px-2 font-bold text-white">${s.name}</td>
+            <td class="py-2 px-1 text-slate-400">${s.parentUsername}</td>
+            <td class="py-2 px-1 text-center">
+              <button onclick="addAdminComment('${s.id}')" class="bg-amber-500 text-slate-950 font-bold px-2 py-0.5 rounded text-[9px]">+ Yorum Yaz</button>
+            </td>
+          </tr>
+        `).join('');
+
+      // Tüm Kullanıcılar & Şifre Yönetimi
       const usersTbody = document.getElementById('adminUsersTable');
-      usersTbody.innerHTML = users.map(u => `
+      usersTbody.innerHTML = usersList.map(u => `
         <tr>
           <td class="py-2 px-2 font-bold text-white">${u.name}</td>
           <td class="py-2 px-1 text-slate-400 uppercase text-[9px] font-bold">${u.role}</td>
@@ -571,42 +610,52 @@
           <td class="py-2 px-1 text-center space-x-1">
             ${u.username !== currentUser.username ? `
               <button onclick="deleteUser('${u.username}')" class="bg-red-600/30 text-red-400 font-bold px-1.5 py-0.5 rounded text-[9px]">Sil</button>
-              <button onclick="loginUser(getUsers().find(x=>x.username==='${u.username}'))" class="bg-amber-500 text-slate-950 font-black px-1.5 py-0.5 rounded text-[9px]">Geç</button>
+              <button onclick="loginUser(getUsers().find(x=>x.username==='${u.username}'))" class="bg-amber-500 text-slate-950 font-black px-1.5 py-0.5 rounded text-[9px]">Geçiş</button>
             ` : '<span class="text-[9px] text-slate-500">Aktif</span>'}
           </td>
         </tr>
       `).join('');
     }
 
+    function addAdminComment(studentId) {
+      const text = prompt("Öğrenci için yönetici yorumu yazın:");
+      if (!text) return;
+      const comments = getComments();
+      if (!comments[studentId]) comments[studentId] = [];
+      comments[studentId].push({ author: 'Sistem Yöneticisi (Admin)', text });
+      saveComments(comments);
+      alert("Admin yorumu kaydedildi!");
+    }
+
     function approveUser(username, isApproved) {
-      let users = getUsers();
-      const user = users.find(u => u.username === username);
+      let usersList = getUsers();
+      const user = usersList.find(u => u.username === username);
 
       if (isApproved && user) {
-        users = users.map(u => u.username === username ? { ...u, approved: true } : u);
+        usersList = usersList.map(u => u.username === username ? { ...u, approved: true } : u);
         if (user.role === 'student') {
-          let students = getStudents();
+          let studentsList = getStudents();
           const newStudentId = 'st_' + Date.now();
-          students.push({
+          studentsList.push({
             id: newStudentId,
             name: user.studentName || user.name + ' Çocuğu',
             grade: '9',
             parentUsername: user.username
           });
-          saveStudents(students);
+          saveStudents(studentsList);
         }
       } else {
-        users = users.filter(u => u.username !== username);
+        usersList = usersList.filter(u => u.username !== username);
       }
-      saveUsers(users);
+      saveUsers(usersList);
       renderAdminView();
-      alert(isApproved ? "Kullanıcı onaylandı!" : "Kullanıcı reddedildi/silindi.");
+      alert(isApproved ? "Kullanıcı onaylandı ve sisteme aktarıldı!" : "Kullanıcı reddedildi/silindi.");
     }
 
     function deleteUser(username) {
-      if (!confirm("Bu kullanıcıyı ve bağlı verilerini silmek istediğinize emin misiniz?")) return;
-      let users = getUsers().filter(u => u.username !== username);
-      saveUsers(users);
+      if (!confirm("Bu kullanıcıyı silmek istediğinize emin misiniz?")) return;
+      let usersList = getUsers().filter(u => u.username !== username);
+      saveUsers(usersList);
       renderAdminView();
       alert("Kullanıcı silindi.");
     }
