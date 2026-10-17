@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Demet Eğitim Kurumları - e-Okul Portal</title>
+  <title>Demet Eğitim Kurumları - Canlı e-Okul Portal</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- FontAwesome Icons -->
@@ -35,7 +35,7 @@
         </div>
         <div>
           <h1 class="text-xs font-black tracking-wide text-white" id="headerSchoolName">DEMET EĞİTİM KURUMLARI</h1>
-          <p class="text-[9px] text-amber-400 font-semibold uppercase tracking-wider">e-Okul Yönetim Portalı</p>
+          <p class="text-[9px] text-amber-400 font-semibold uppercase tracking-wider">Canlı e-Okul Portalı</p>
         </div>
       </div>
       <div id="userBadge" class="hidden flex items-center space-x-2 bg-slate-900/80 px-2 py-1 rounded-xl border border-slate-700">
@@ -147,7 +147,7 @@
             <i class="fa-solid fa-school text-amber-400"></i>
             <h3 class="font-extrabold text-white text-xs" id="infoSchoolName">Demet Eğitim Kurumları</h3>
           </div>
-          <span class="text-[9px] bg-amber-500/20 text-amber-400 border border-amber-500/30 px-2 py-0.5 rounded font-bold">Kurum Bilgisi</span>
+          <span class="text-[9px] bg-amber-500/20 text-amber-400 border border-amber-500/30 px-2 py-0.5 rounded font-bold">Canlı Yayın</span>
         </div>
         <p class="text-xs text-slate-300 leading-relaxed" id="infoSchoolNotice">Sistem aktiftir.</p>
       </div>
@@ -160,6 +160,15 @@
         </div>
 
         <div id="selectedStudentDetails" class="space-y-4">
+          <!-- Belge Durum Kartı -->
+          <div class="bg-gradient-to-r from-amber-500/10 to-amber-600/20 p-3.5 rounded-2xl border border-amber-500/30 flex items-center justify-between">
+            <div>
+              <span class="text-[10px] text-amber-400 font-bold uppercase">Genel Başarı Durumu</span>
+              <h4 id="studentDocumentStatus" class="text-xs font-black text-white mt-0.5">Hesaplanıyor...</h4>
+            </div>
+            <span id="studentAverageBadge" class="text-base font-black bg-amber-500 text-slate-950 px-2.5 py-1 rounded-xl">0.0</span>
+          </div>
+
           <div class="bg-brand-card/80 p-4 rounded-2xl border border-slate-800 shadow-xl">
             <h3 class="font-bold text-white text-xs border-b border-slate-800 pb-2 mb-3 flex items-center gap-2">
               <i class="fa-solid fa-graduation-cap text-amber-400"></i> Ders Notları Tablosu
@@ -192,8 +201,9 @@
       <!-- ÖĞRETMEN PANELİ -->
       <div id="viewTeacher" class="dashboard-view hidden space-y-4">
         <div class="bg-brand-card/80 p-4 rounded-2xl border border-slate-800 shadow-xl">
-          <h3 class="font-bold text-white text-xs border-b border-slate-800 pb-2 mb-3 flex items-center gap-2">
-            <i class="fa-solid fa-pen-to-square text-amber-400"></i> Yoklama Alma & Not Giriş Paneli
+          <h3 class="font-bold text-white text-xs border-b border-slate-800 pb-2 mb-3 flex items-center justify-between">
+            <span class="flex items-center gap-2"><i class="fa-solid fa-pen-to-square text-amber-400"></i> Yoklama & Not Giriş Paneli</span>
+            <span id="teacherBranchBadge" class="bg-amber-500/20 text-amber-400 text-[10px] px-2 py-0.5 rounded font-bold"></span>
           </h3>
           <div class="overflow-x-auto">
             <table class="w-full text-left text-xs">
@@ -218,7 +228,7 @@
         <!-- Okul Ayarları -->
         <div class="bg-brand-card/80 p-4 rounded-2xl border border-slate-800 shadow-xl space-y-3">
           <h3 class="font-bold text-amber-400 text-xs border-b border-slate-800 pb-2 flex items-center gap-2">
-            <i class="fa-solid fa-sliders"></i> Okul İsmi ve Duyuru Yönetimi
+            <i class="fa-solid fa-sliders"></i> Okul İsmi ve Canlı Duyuru Yönetimi
           </h3>
           <div>
             <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Okul Adı</label>
@@ -229,7 +239,7 @@
             <textarea id="adminInputSchoolNotice" rows="2" class="w-full bg-slate-900 border border-slate-700 text-xs text-white rounded-xl p-2"></textarea>
           </div>
           <button onclick="saveSchoolSettings()" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-black text-xs px-3 py-1.5 rounded-xl uppercase">
-            Bilgileri Güncelle
+            Herkeste Canlı Güncelle
           </button>
         </div>
 
@@ -269,7 +279,7 @@
           <h3 class="font-bold text-white text-xs border-b border-slate-800 pb-1 flex items-center gap-2">
             <i class="fa-solid fa-users-gear text-amber-400"></i> Sistemdeki Kişiler & Şifre Yönetimi
           </h3>
-          <p class="text-[10px] text-slate-400 mb-3">Sistemdeki tüm şifreler sadece burada görülür.</p>
+          <p class="text-[10px] text-slate-400 mb-3">Tüm şifreler canlı olarak burada görülür.</p>
           <div class="overflow-x-auto">
             <table class="w-full text-left text-xs">
               <thead class="bg-slate-900 text-slate-400 uppercase text-[9px] font-bold">
@@ -290,7 +300,8 @@
   </main>
 
   <script>
-    const DEFAULT_SCHOOL = { name: 'Demet Eğitim Kurumları', notice: '2026-2027 Eğitim Yılı Sistem Paneli Aktiftir.' };
+    // VERİTABANI VE CANLI OTOMATİK SENKRONİZASYON
+    const DEFAULT_SCHOOL = { name: 'Demet Eğitim Kurumları', notice: '2026-2027 Eğitim Yılı Canlı e-Okul Paneli Aktiftir.' };
     const DEFAULT_USERS = [
       { username: 'admin', password: '201221ST', name: 'Sistem Yöneticisi', role: 'admin', approved: true },
       { username: 'veli101', password: '123', name: 'Ali Yılmaz (Veli)', role: 'student', approved: true }
@@ -425,6 +436,7 @@
         renderStudentParentView();
       } else if (currentUser.role === 'teacher') {
         document.getElementById('viewTeacher').classList.remove('hidden');
+        document.getElementById('teacherBranchBadge').innerText = currentUser.subject || 'Genel';
         renderTeacherView();
       } else if (currentUser.role === 'admin') {
         document.getElementById('viewAdmin').classList.remove('hidden');
@@ -458,11 +470,16 @@
       const tbody = document.getElementById('studentGradesTable');
       tbody.innerHTML = '';
 
+      let totalSum = 0;
+      let count = 0;
+
       if (gradesData.length === 0) {
         tbody.innerHTML = `<tr><td colspan="5" class="py-2 text-center text-slate-500">Not kaydı yok.</td></tr>`;
       } else {
         gradesData.forEach(item => {
           const avg = Math.round((item.exam1 + item.exam2 + item.verbal) / 3);
+          totalSum += avg;
+          count++;
           tbody.innerHTML += `
             <tr>
               <td class="py-2 px-2 font-bold text-white">${item.subject}</td>
@@ -474,6 +491,16 @@
           `;
         });
       }
+
+      const overallAvg = count > 0 ? (totalSum / count).toFixed(1) : 0;
+      document.getElementById('studentAverageBadge').innerText = overallAvg;
+      
+      let docText = "Belge Durumu: Belge Alınamıyor";
+      if (overallAvg >= 85) docText = "🏆 TAKDİR BELGESİ ALMAYA HAK KAZANDI";
+      else if (overallAvg >= 70) docText = "📜 TEŞEKKÜR BELGESİ ALMAYA HAK KAZANDI";
+      else if (overallAvg >= 50) docText = "Sınıfı Geçti";
+      
+      document.getElementById('studentDocumentStatus').innerText = docText;
 
       const commentsData = getComments()[selectedStudentId] || [];
       const cList = document.getElementById('studentCommentsList');
@@ -527,7 +554,7 @@
       if (!item) { item = { subject, exam1: 0, exam2: 0, verbal: 0, ozursuz: 0 }; grades[id].push(item); }
       item.ozursuz = (item.ozursuz || 0) + 1;
       saveGrades(grades);
-      alert("Öğrenciye +1 Devamsızlık eklendi.");
+      alert("Öğrenciye +1 Devamsızlık işlendi.");
     }
 
     function saveTeacherGrade(id) {
@@ -560,7 +587,7 @@
         name: document.getElementById('adminInputSchoolName').value.trim(),
         notice: document.getElementById('adminInputSchoolNotice').value.trim()
       });
-      alert("Okul bilgileri güncellendi!");
+      alert("Okul bilgileri canlı olarak güncellendi!");
     }
 
     function renderAdminView() {
@@ -568,7 +595,6 @@
       document.getElementById('adminInputSchoolName').value = school.name;
       document.getElementById('adminInputSchoolNotice').value = school.notice;
 
-      // Bekleyenler Listesi
       const usersList = getUsers();
       const pendingTbody = document.getElementById('adminPendingTable');
       const pendingUsers = usersList.filter(u => !u.approved);
@@ -585,7 +611,6 @@
           </tr>
         `).join('');
 
-      // Öğrenci Yönetimi Tablosu
       const studentsList = getStudents();
       const adminStudentsTbody = document.getElementById('adminStudentsTable');
       adminStudentsTbody.innerHTML = studentsList.length === 0
@@ -600,7 +625,6 @@
           </tr>
         `).join('');
 
-      // Tüm Kullanıcılar & Şifre Yönetimi
       const usersTbody = document.getElementById('adminUsersTable');
       usersTbody.innerHTML = usersList.map(u => `
         <tr>
