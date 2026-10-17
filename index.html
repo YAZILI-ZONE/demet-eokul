@@ -114,8 +114,12 @@
             </select>
           </div>
           <div>
-            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Ad Soyad</label>
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Ad Soyad (Öğrenci veya Veli)</label>
             <input type="text" id="regFullName" required class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-xs text-slate-200" placeholder="Ad Soyad">
+          </div>
+          <div id="regStudentNameGroup">
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Öğrenci Adı Soyadı (Veli İçin)</label>
+            <input type="text" id="regStudentName" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-xs text-slate-200" placeholder="Öğrencinin Adı">
           </div>
           <div>
             <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Kullanıcı Adı</label>
@@ -243,7 +247,7 @@
           <h3 class="font-bold text-white text-xs border-b border-slate-800 pb-1 flex items-center gap-2">
             <i class="fa-solid fa-users-gear text-amber-400"></i> Sistemdeki Kişiler ve Şifre Yönetimi
           </h3>
-          <p class="text-[10px] text-slate-400 mb-3">Tüm kişilerin şifreleri sadece burada Admin'e görünür.</p>
+          <p class="text-[10px] text-slate-400 mb-3">Kişileri görebilir, şifrelerini inceleyebilir ve silebilirsiniz.</p>
           <div class="overflow-x-auto">
             <table class="w-full text-left text-xs">
               <thead class="bg-slate-900 text-slate-400 uppercase text-[9px] font-bold">
@@ -251,7 +255,7 @@
                   <th class="py-2 px-2">Kişi</th>
                   <th class="py-2 px-1">Rol</th>
                   <th class="py-2 px-1">Şifre</th>
-                  <th class="py-2 px-1 text-center">Giriş Yap</th>
+                  <th class="py-2 px-1 text-center">İşlem</th>
                 </tr>
               </thead>
               <tbody id="adminUsersTable" class="divide-y divide-slate-800"></tbody>
@@ -264,7 +268,6 @@
   </main>
 
   <script>
-    // AUTO-HEAL INITIALIZATION & STORAGE GUARANTEE
     const DEFAULT_SCHOOL = { name: 'Demet Eğitim Kurumları', notice: '2026-2027 Eğitim Yılı Sistem Paneli Aktiftir.' };
     const DEFAULT_USERS = [
       { username: 'admin', password: '201221ST', name: 'Sistem Yöneticisi', role: 'admin', approved: true },
@@ -276,7 +279,6 @@
 
     if (!localStorage.getItem('demet_school')) localStorage.setItem('demet_school', JSON.stringify(DEFAULT_SCHOOL));
     
-    // Ensure admin user is ALWAYS present & correct
     let users = JSON.parse(localStorage.getItem('demet_users')) || DEFAULT_USERS;
     const adminIdx = users.findIndex(u => u.username === 'admin');
     if (adminIdx === -1) {
@@ -300,6 +302,7 @@
     function getUsers() { return JSON.parse(localStorage.getItem('demet_users')); }
     function saveUsers(u) { localStorage.setItem('demet_users', JSON.stringify(u)); }
     function getStudents() { return JSON.parse(localStorage.getItem('demet_students')); }
+    function saveStudents(s) { localStorage.setItem('demet_students', JSON.stringify(s)); }
     function getGrades() { return JSON.parse(localStorage.getItem('demet_grades')); }
     function saveGrades(g) { localStorage.setItem('demet_grades', JSON.stringify(g)); }
     function getComments() { return JSON.parse(localStorage.getItem('demet_comments')); }
@@ -329,7 +332,9 @@
     }
 
     document.getElementById('regRole').addEventListener('change', (e) => {
-      document.getElementById('regSubjectGroup').classList.toggle('hidden', e.target.value !== 'teacher');
+      const isTeacher = e.target.value === 'teacher';
+      document.getElementById('regSubjectGroup').classList.toggle('hidden', !isTeacher);
+      document.getElementById('regStudentNameGroup').classList.toggle('hidden', isTeacher);
     });
 
     function handleLogin(e) {
@@ -341,7 +346,7 @@
       const users = getUsers();
       const user = users.find(u => u.username.toLowerCase() === username.toLowerCase() && u.password === password && u.role === role);
 
-      if (!user) { alert("Hatalı kullanıcı adı, şifre veya rol seçimi!"); return; }
+      if (!user) { alert("Hatalı kullanıcı adı, şifre veya giriş türü!"); return; }
       if (!user.approved) { alert("Hesabınız Admin tarafından henüz onaylanmamış!"); return; }
 
       loginUser(user);
@@ -354,14 +359,24 @@
       const username = document.getElementById('regUsername').value.trim();
       const password = document.getElementById('regPassword').value.trim();
       const subject = document.getElementById('regSubject').value;
+      const studentName = document.getElementById('regStudentName').value.trim();
 
       const users = getUsers();
       if (users.some(u => u.username === username)) { alert("Bu kullanıcı adı alınmış!"); return; }
 
-      users.push({ username, password, name, role, subject: role === 'teacher' ? subject : null, approved: false });
+      users.push({ 
+        username, 
+        password, 
+        name, 
+        role, 
+        subject: role === 'teacher' ? subject : null, 
+        studentName: role === 'student' ? (studentName || name + ' Çocuğu') : null,
+        approved: false 
+      });
       saveUsers(users);
       alert("Başvurunuz alındı. Admin onayladıktan sonra giriş yapabilirsiniz.");
       switchAuthTab('login');
+      document.getElementById('registerForm').reset();
     }
 
     function loginUser(user) {
@@ -401,11 +416,13 @@
       container.innerHTML = '';
 
       if (students.length === 0) {
-        container.innerHTML = `<p class="text-xs text-slate-400">Bağlı öğrenci yok.</p>`;
+        container.innerHTML = `<p class="text-xs text-slate-400">Bağlı öğrenci bulunamadı.</p>`;
         return;
       }
 
-      if (!selectedStudentId) selectedStudentId = students[0].id;
+      if (!selectedStudentId || !students.some(s => s.id === selectedStudentId)) {
+        selectedStudentId = students[0].id;
+      }
 
       students.forEach(st => {
         container.innerHTML += `
@@ -419,22 +436,26 @@
       const tbody = document.getElementById('studentGradesTable');
       tbody.innerHTML = '';
 
-      gradesData.forEach(item => {
-        const avg = Math.round((item.exam1 + item.exam2 + item.verbal) / 3);
-        tbody.innerHTML += `
-          <tr>
-            <td class="py-2 px-2 font-bold text-white">${item.subject}</td>
-            <td class="py-2 px-1 text-center">${item.exam1}</td>
-            <td class="py-2 px-1 text-center">${item.exam2}</td>
-            <td class="py-2 px-1 text-center">${item.verbal}</td>
-            <td class="py-2 px-1 text-center font-black ${avg >= 50 ? 'text-emerald-400' : 'text-red-400'}">${avg}</td>
-          </tr>
-        `;
-      });
+      if (gradesData.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="py-2 text-center text-slate-500">Not kaydı yok.</td></tr>`;
+      } else {
+        gradesData.forEach(item => {
+          const avg = Math.round((item.exam1 + item.exam2 + item.verbal) / 3);
+          tbody.innerHTML += `
+            <tr>
+              <td class="py-2 px-2 font-bold text-white">${item.subject}</td>
+              <td class="py-2 px-1 text-center">${item.exam1}</td>
+              <td class="py-2 px-1 text-center">${item.exam2}</td>
+              <td class="py-2 px-1 text-center">${item.verbal}</td>
+              <td class="py-2 px-1 text-center font-black ${avg >= 50 ? 'text-emerald-400' : 'text-red-400'}">${avg}</td>
+            </tr>
+          `;
+        });
+      }
 
       const commentsData = getComments()[selectedStudentId] || [];
       const cList = document.getElementById('studentCommentsList');
-      cList.innerHTML = commentsData.map(c => `
+      cList.innerHTML = commentsData.length === 0 ? `<p class="text-slate-500">Yorum bulunmuyor.</p>` : commentsData.map(c => `
         <div class="bg-slate-900 p-2 rounded-xl border border-slate-800">
           <span class="text-[10px] font-bold text-amber-400">${c.author}</span>
           <p class="text-slate-200 mt-0.5">${c.text}</p>
@@ -449,6 +470,11 @@
       const tbody = document.getElementById('teacherStudentsTable');
       tbody.innerHTML = '';
 
+      if (students.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="py-3 text-center text-slate-500">Kayıtlı öğrenci yok.</td></tr>`;
+        return;
+      }
+
       students.forEach(student => {
         const studentGrades = gradesData[student.id] || [];
         let g = studentGrades.find(x => x.subject === subject) || { subject, exam1: 0, exam2: 0, verbal: 0 };
@@ -462,8 +488,9 @@
             <td class="py-2 px-1 text-center"><input type="number" id="e1_${student.id}" value="${g.exam1}" class="w-8 bg-slate-900 border border-slate-700 text-center rounded p-1 text-white"></td>
             <td class="py-2 px-1 text-center"><input type="number" id="e2_${student.id}" value="${g.exam2}" class="w-8 bg-slate-900 border border-slate-700 text-center rounded p-1 text-white"></td>
             <td class="py-2 px-1 text-center"><input type="number" id="v_${student.id}" value="${g.verbal}" class="w-8 bg-slate-900 border border-slate-700 text-center rounded p-1 text-white"></td>
-            <td class="py-2 px-1 text-center">
+            <td class="py-2 px-1 text-center space-x-1">
               <button onclick="saveTeacherGrade('${student.id}')" class="bg-amber-500 text-slate-950 font-black px-1.5 py-0.5 rounded text-[9px]">Kaydet</button>
+              <button onclick="addTeacherComment('${student.id}')" class="bg-slate-800 text-amber-400 px-1 py-0.5 rounded text-[9px]">Yorum</button>
             </td>
           </tr>
         `;
@@ -478,7 +505,7 @@
       if (!item) { item = { subject, exam1: 0, exam2: 0, verbal: 0, ozursuz: 0 }; grades[id].push(item); }
       item.ozursuz = (item.ozursuz || 0) + 1;
       saveGrades(grades);
-      alert("Devamsızlık eklendi.");
+      alert("Öğrenciye +1 Devamsızlık işlendi.");
     }
 
     function saveTeacherGrade(id) {
@@ -486,7 +513,6 @@
       if (!grades[id]) grades[id] = [];
       const subject = currentUser.subject || 'Genel';
       let item = grades[id].find(g => g.subject === subject);
-
       if (!item) { item = { subject, exam1: 0, exam2: 0, verbal: 0, ozursuz: 0 }; grades[id].push(item); }
 
       item.exam1 = parseInt(document.getElementById(`e1_${id}`).value) || 0;
@@ -495,6 +521,16 @@
 
       saveGrades(grades);
       alert("Notlar kaydedildi!");
+    }
+
+    function addTeacherComment(id) {
+      const text = prompt("Değerlendirme yorumunu yazın:");
+      if (!text) return;
+      const comments = getComments();
+      if (!comments[id]) comments[id] = [];
+      comments[id].push({ author: `${currentUser.name} (${currentUser.subject || 'Öğretmen'})`, text });
+      saveComments(comments);
+      alert("Yorum eklendi!");
     }
 
     function saveSchoolSettings() {
@@ -518,7 +554,7 @@
         ? `<tr><td colspan="2" class="py-2 text-center text-slate-500">Bekleyen üye yok.</td></tr>`
         : pendingUsers.map(u => `
           <tr>
-            <td class="py-2 px-2 font-bold text-white">${u.name} (${u.role})</td>
+            <td class="py-2 px-2 font-bold text-white">${u.name} (${u.role}${u.subject ? ' - ' + u.subject : ''})</td>
             <td class="py-2 px-1 text-right space-x-1">
               <button onclick="approveUser('${u.username}', true)" class="bg-emerald-600 text-white px-2 py-0.5 rounded text-[10px]">Onayla</button>
               <button onclick="approveUser('${u.username}', false)" class="bg-red-600 text-white px-2 py-0.5 rounded text-[10px]">Reddet</button>
@@ -532,8 +568,11 @@
           <td class="py-2 px-2 font-bold text-white">${u.name}</td>
           <td class="py-2 px-1 text-slate-400 uppercase text-[9px] font-bold">${u.role}</td>
           <td class="py-2 px-1 font-mono font-bold text-amber-400">${u.password}</td>
-          <td class="py-2 px-1 text-center">
-            ${u.username !== currentUser.username ? `<button onclick="loginUser(getUsers().find(x=>x.username==='${u.username}'))" class="bg-amber-500 text-slate-950 text-[9px] font-black px-2 py-0.5 rounded">Giriş Yap</button>` : '<span class="text-[9px] text-slate-500">Aktif</span>'}
+          <td class="py-2 px-1 text-center space-x-1">
+            ${u.username !== currentUser.username ? `
+              <button onclick="deleteUser('${u.username}')" class="bg-red-600/30 text-red-400 font-bold px-1.5 py-0.5 rounded text-[9px]">Sil</button>
+              <button onclick="loginUser(getUsers().find(x=>x.username==='${u.username}'))" class="bg-amber-500 text-slate-950 font-black px-1.5 py-0.5 rounded text-[9px]">Geç</button>
+            ` : '<span class="text-[9px] text-slate-500">Aktif</span>'}
           </td>
         </tr>
       `).join('');
@@ -541,10 +580,35 @@
 
     function approveUser(username, isApproved) {
       let users = getUsers();
-      if (isApproved) users = users.map(u => u.username === username ? { ...u, approved: true } : u);
-      else users = users.filter(u => u.username !== username);
+      const user = users.find(u => u.username === username);
+
+      if (isApproved && user) {
+        users = users.map(u => u.username === username ? { ...u, approved: true } : u);
+        if (user.role === 'student') {
+          let students = getStudents();
+          const newStudentId = 'st_' + Date.now();
+          students.push({
+            id: newStudentId,
+            name: user.studentName || user.name + ' Çocuğu',
+            grade: '9',
+            parentUsername: user.username
+          });
+          saveStudents(students);
+        }
+      } else {
+        users = users.filter(u => u.username !== username);
+      }
       saveUsers(users);
       renderAdminView();
+      alert(isApproved ? "Kullanıcı onaylandı!" : "Kullanıcı reddedildi/silindi.");
+    }
+
+    function deleteUser(username) {
+      if (!confirm("Bu kullanıcıyı ve bağlı verilerini silmek istediğinize emin misiniz?")) return;
+      let users = getUsers().filter(u => u.username !== username);
+      saveUsers(users);
+      renderAdminView();
+      alert("Kullanıcı silindi.");
     }
   </script>
 </body>
