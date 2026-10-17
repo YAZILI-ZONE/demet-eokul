@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Demet Eğitim Kurumları - e-Okul Portal</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              navy: '#0f172a',
+              card: '#1e293b',
+              accent: '#d97706'
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col antialiased selection:bg-amber-500 selection:text-slate-900">
+
+  <!-- UST BANT -->
+  <header class="bg-brand-card/95 backdrop-blur-md border-b border-slate-800 sticky top-0 z-50">
+    <div class="max-w-md mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-9 h-9 bg-gradient-to-tr from-amber-500 to-amber-300 rounded-xl flex items-center justify-center text-slate-950 font-black text-lg shadow-lg">
+          D
+        </div>
+        <div>
+          <h1 class="text-xs font-black tracking-wide text-white" id="headerSchoolName">DEMET EĞİTİM KURUMLARI</h1>
+          <p class="text-[9px] text-amber-400 font-semibold uppercase tracking-wider">e-Okul Yönetim Portalı</p>
+        </div>
+      </div>
+      <div id="userBadge" class="hidden flex items-center space-x-2 bg-slate-900/80 px-2 py-1 rounded-xl border border-slate-700">
+        <span id="badgeName" class="text-[10px] text-amber-400 font-bold"></span>
+        <button onclick="logout()" class="text-[10px] bg-red-600 hover:bg-red-700 text-white px-2 py-0.5 rounded font-bold transition">
+          Çıkış
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ANA ICERIK -->
+  <main class="flex-1 max-w-md w-full mx-auto p-4 flex flex-col justify-center">
+
+    <!-- 1. GIRIS KARTI -->
+    <section id="authSection" class="w-full my-auto space-y-4">
+      <div class="bg-brand-card/80 backdrop-blur-xl rounded-3xl p-5 text-center shadow-2xl border border-slate-800">
+        <div class="w-14 h-14 bg-amber-500/10 border border-amber-500/30 text-amber-400 rounded-2xl flex items-center justify-center mx-auto mb-2">
+          <i class="fa-solid fa-graduation-cap text-2xl"></i>
+        </div>
+        <h2 class="text-lg font-black text-white" id="authSchoolTitle">Demet Eğitim Kurumları</h2>
+        <p class="text-[11px] text-slate-400 mt-0.5">Kurumsal Bilgi Sistemine Güvenli Giriş</p>
+      </div>
+
+      <div class="bg-brand-card/80 backdrop-blur-xl rounded-3xl p-5 shadow-2xl border border-slate-800">
+        <div class="flex bg-slate-900 p-1 rounded-xl mb-4 border border-slate-800">
+          <button id="tabLoginBtn" onclick="switchAuthTab('login')" class="flex-1 py-1.5 text-xs font-bold rounded-lg text-amber-400 bg-slate-800 shadow">
+            Giriş Yap
+          </button>
+          <button id="tabRegisterBtn" onclick="switchAuthTab('register')" class="flex-1 py-1.5 text-xs font-bold rounded-lg text-slate-400">
+            Kayıt Başvurusu
+          </button>
+        </div>
+
+        <!-- FORM: GIRIS -->
+        <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-3">
+          <div>
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Giriş Türü</label>
+            <select id="loginRole" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-xs font-semibold text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500">
+              <option value="admin">Sistem Yöneticisi (Admin)</option>
+              <option value="teacher">Öğretmen</option>
+              <option value="student">Veli / Öğrenci</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Kullanıcı Adı</label>
+            <input type="text" id="loginUsername" required class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-xs text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500" placeholder="admin">
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Şifre</label>
+            <input type="password" id="loginPassword" required class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-xs text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500" placeholder="••••••••">
+          </div>
+          <button type="submit" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-black py-2.5 rounded-xl shadow-lg text-xs uppercase tracking-wider transition">
+            Giriş Yap
+          </button>
+        </form>
+
+        <!-- FORM: KAYIT -->
+        <form id="registerForm" onsubmit="handleRegister(event)" class="space-y-3 hidden">
+          <div>
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Rol</label>
+            <select id="regRole" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-xs font-semibold text-slate-200">
+              <option value="student">Veli / Öğrenci</option>
+              <option value="teacher">Öğretmen</option>
+            </select>
+          </div>
+          <div id="regSubjectGroup" class="hidden">
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-amber-400 mb-1">Branş</label>
+            <select id="regSubject" class="w-full px-3 py-2 bg-slate-900 border border-amber-500/50 rounded-xl text-xs font-bold text-amber-400">
+              <option value="Matematik">Matematik</option>
+              <option value="Türkçe">Türkçe / Edebiyat</option>
+              <option value="Fizik">Fizik</option>
+              <option value="Kimya">Kimya</option>
+              <option value="Biyoloji">Biyoloji</option>
+              <option value="İngilizce">İngilizce</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Ad Soyad</label>
+            <input type="text" id="regFullName" required class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-xs text-slate-200" placeholder="Ad Soyad">
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Kullanıcı Adı</label>
+            <input type="text" id="regUsername" required class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-xs text-slate-200" placeholder="kullanici_adi">
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Şifre</label>
+            <input type="password" id="regPassword" required class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-xs text-slate-200" placeholder="••••••••">
+          </div>
+          <button type="submit" class="w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-2.5 rounded-xl text-xs uppercase tracking-wider transition">
+            Başvuru Gönder
+          </button>
+        </form>
+
+      </div>
+    </section>
+
+    <!-- 2. PORTAL EKRANI -->
+    <div id="dashboardSection" class="hidden w-full space-y-4 my-auto">
+
+      <!-- Okul Bilgi Paneli -->
+      <div class="bg-brand-card/80 backdrop-blur-xl p-4 rounded-2xl border border-slate-800 shadow-xl">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-2 mb-2">
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-school text-amber-400"></i>
+            <h3 class="font-extrabold text-white text-xs" id="infoSchoolName">Demet Eğitim Kurumları</h3>
+          </div>
+          <span class="text-[9px] bg-amber-500/20 text-amber-400 border border-amber-500/30 px-2 py-0.5 rounded font-bold">Kurum Bilgisi</span>
+        </div>
+        <p class="text-xs text-slate-300 leading-relaxed" id="infoSchoolNotice">Sistem aktiftir.</p>
+      </div>
+
+      <!-- VELI PANELİ -->
+      <div id="viewStudent" class="dashboard-view hidden space-y-4">
+        <div class="bg-brand-card/80 p-4 rounded-2xl border border-slate-800 shadow-xl">
+          <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Öğrenci Seçiniz:</p>
+          <div id="parentStudentSelector" class="flex flex-wrap gap-2"></div>
+        </div>
+
+        <div id="selectedStudentDetails" class="space-y-4">
+          <div class="bg-brand-card/80 p-4 rounded-2xl border border-slate-800 shadow-xl">
+            <h3 class="font-bold text-white text-xs border-b border-slate-800 pb-2 mb-3 flex items-center gap-2">
+              <i class="fa-solid fa-graduation-cap text-amber-400"></i> Ders Notları Tablosu
+            </h3>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-slate-900 text-slate-400 uppercase text-[9px] font-bold">
+                  <tr>
+                    <th class="py-2 px-2">Ders</th>
+                    <th class="py-2 px-1 text-center">S1</th>
+                    <th class="py-2 px-1 text-center">S2</th>
+                    <th class="py-2 px-1 text-center">Söz</th>
+                    <th class="py-2 px-1 text-center">Ort</th>
+                  </tr>
+                </thead>
+                <tbody id="studentGradesTable" class="divide-y divide-slate-800 text-slate-300"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="bg-brand-card/80 p-4 rounded-2xl border border-slate-800 shadow-xl">
+            <h3 class="font-bold text-white text-xs border-b border-slate-800 pb-2 mb-3 flex items-center gap-2">
+              <i class="fa-solid fa-comments text-amber-400"></i> Öğretmen Değerlendirmeleri
+            </h3>
+            <div id="studentCommentsList" class="space-y-2 text-xs text-slate-300"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- OGRETMEN PANELİ -->
+      <div id="viewTeacher" class="dashboard-view hidden space-y-4">
+        <div class="bg-brand-card/80 p-4 rounded-2xl border border-slate-800 shadow-xl">
+          <h3 class="font-bold text-white text-xs border-b border-slate-800 pb-2 mb-3 flex items-center gap-2">
+            <i class="fa-solid fa-pen-to-square text-amber-400"></i> Bütün Öğrenciler & Not Girişi
+          </h3>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-900 text-slate-400 uppercase text-[9px] font-bold">
+                <tr>
+                  <th class="py-2 px-2">Öğrenci</th>
+                  <th class="py-2 px-1 text-center">Yoklama</th>
+                  <th class="py-2 px-1 text-center">S1</th>
+                  <th class="py-2 px-1 text-center">S2</th>
+                  <th class="py-2 px-1 text-center">Söz</th>
+                  <th class="py-2 px-1 text-center">Eylem</th>
+                </tr>
+              </thead>
+              <tbody id="teacherStudentsTable" class="divide-y divide-slate-800"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ADMIN PANELİ -->
+      <div id="viewAdmin" class="dashboard-view hidden space-y-4">
+        <div class="bg-brand-card/80 p-4 rounded-2xl border border-slate-800 shadow-xl space-y-3">
+          <h3 class="font-bold text-amber-400 text-xs border-b border-slate-800 pb-2 flex items-center gap-2">
+            <i class="fa-solid fa-sliders"></i> Okul İsmi ve Duyuru Yönetimi
+          </h3>
+          <div>
+            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Okul Adı</label>
+            <input type="text" id="adminInputSchoolName" class="w-full bg-slate-900 border border-slate-700 text-xs text-white rounded-xl p-2">
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Duyuru Metni</label>
+            <textarea id="adminInputSchoolNotice" rows="2" class="w-full bg-slate-900 border border-slate-700 text-xs text-white rounded-xl p-2"></textarea>
+          </div>
+          <button onclick="saveSchoolSettings()" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-black text-xs px-3 py-1.5 rounded-xl uppercase">
+            Bilgileri Güncelle
+          </button>
+        </div>
+
+        <div class="bg-brand-card/80 p-4 rounded-2xl border border-slate-800 shadow-xl">
+          <h3 class="font-bold text-white text-xs border-b border-slate-800 pb-2 mb-3 flex items-center gap-2">
+            <i class="fa-solid fa-user-check text-amber-400"></i> Kayıt Başvurusu Onayları
+          </h3>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <tbody id="adminPendingTable" class="divide-y divide-slate-800"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="bg-brand-card/80 p-4 rounded-2xl border border-slate-800 shadow-xl">
+          <h3 class="font-bold text-white text-xs border-b border-slate-800 pb-1 flex items-center gap-2">
+            <i class="fa-solid fa-users-gear text-amber-400"></i> Sistemdeki Kişiler ve Şifre Yönetimi
+          </h3>
+          <p class="text-[10px] text-slate-400 mb-3">Tüm kişilerin şifreleri sadece burada Admin'e görünür.</p>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-900 text-slate-400 uppercase text-[9px] font-bold">
+                <tr>
+                  <th class="py-2 px-2">Kişi</th>
+                  <th class="py-2 px-1">Rol</th>
+                  <th class="py-2 px-1">Şifre</th>
+                  <th class="py-2 px-1 text-center">Giriş Yap</th>
+                </tr>
+              </thead>
+              <tbody id="adminUsersTable" class="divide-y divide-slate-800"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    // AUTO-HEAL INITIALIZATION & STORAGE GUARANTEE
+    const DEFAULT_SCHOOL = { name: 'Demet Eğitim Kurumları', notice: '2026-2027 Eğitim Yılı Sistem Paneli Aktiftir.' };
+    const DEFAULT_USERS = [
+      { username: 'admin', password: '201221ST', name: 'Sistem Yöneticisi', role: 'admin', approved: true },
+      { username: 'veli101', password: '123', name: 'Ali Yılmaz (Veli)', role: 'student', approved: true }
+    ];
+    const DEFAULT_STUDENTS = [{ id: 'st1', name: 'Mehmet Yılmaz', grade: '9', parentUsername: 'veli101' }];
+    const DEFAULT_GRADES = { 'st1': [{ subject: 'Matematik', exam1: 85, exam2: 90, verbal: 95, ozursuz: 1 }] };
+    const DEFAULT_COMMENTS = { 'st1': [{ author: 'Admin', text: 'Başarılı bir öğrenci.' }] };
+
+    if (!localStorage.getItem('demet_school')) localStorage.setItem('demet_school', JSON.stringify(DEFAULT_SCHOOL));
+    
+    // Ensure admin user is ALWAYS present & correct
+    let users = JSON.parse(localStorage.getItem('demet_users')) || DEFAULT_USERS;
+    const adminIdx = users.findIndex(u => u.username === 'admin');
+    if (adminIdx === -1) {
+      users.unshift({ username: 'admin', password: '201221ST', name: 'Sistem Yöneticisi', role: 'admin', approved: true });
+    } else {
+      users[adminIdx].password = '201221ST';
+      users[adminIdx].approved = true;
+      users[adminIdx].role = 'admin';
+    }
+    localStorage.setItem('demet_users', JSON.stringify(users));
+
+    if (!localStorage.getItem('demet_students')) localStorage.setItem('demet_students', JSON.stringify(DEFAULT_STUDENTS));
+    if (!localStorage.getItem('demet_grades')) localStorage.setItem('demet_grades', JSON.stringify(DEFAULT_GRADES));
+    if (!localStorage.getItem('demet_comments')) localStorage.setItem('demet_comments', JSON.stringify(DEFAULT_COMMENTS));
+
+    let currentUser = null;
+    let selectedStudentId = null;
+
+    function getSchool() { return JSON.parse(localStorage.getItem('demet_school')); }
+    function saveSchool(s) { localStorage.setItem('demet_school', JSON.stringify(s)); updateSchoolUI(); }
+    function getUsers() { return JSON.parse(localStorage.getItem('demet_users')); }
+    function saveUsers(u) { localStorage.setItem('demet_users', JSON.stringify(u)); }
+    function getStudents() { return JSON.parse(localStorage.getItem('demet_students')); }
+    function getGrades() { return JSON.parse(localStorage.getItem('demet_grades')); }
+    function saveGrades(g) { localStorage.setItem('demet_grades', JSON.stringify(g)); }
+    function getComments() { return JSON.parse(localStorage.getItem('demet_comments')); }
+    function saveComments(c) { localStorage.setItem('demet_comments', JSON.stringify(c)); }
+
+    function updateSchoolUI() {
+      const school = getSchool();
+      document.getElementById('headerSchoolName').innerText = school.name;
+      document.getElementById('authSchoolTitle').innerText = school.name;
+      document.getElementById('infoSchoolName').innerText = school.name;
+      document.getElementById('infoSchoolNotice').innerText = school.notice;
+    }
+    updateSchoolUI();
+
+    function switchAuthTab(tab) {
+      if (tab === 'login') {
+        document.getElementById('loginForm').classList.remove('hidden');
+        document.getElementById('registerForm').classList.add('hidden');
+        document.getElementById('tabLoginBtn').className = "flex-1 py-1.5 text-xs font-bold rounded-lg text-amber-400 bg-slate-800 shadow";
+        document.getElementById('tabRegisterBtn').className = "flex-1 py-1.5 text-xs font-bold rounded-lg text-slate-400";
+      } else {
+        document.getElementById('loginForm').classList.add('hidden');
+        document.getElementById('registerForm').classList.remove('hidden');
+        document.getElementById('tabRegisterBtn').className = "flex-1 py-1.5 text-xs font-bold rounded-lg text-amber-400 bg-slate-800 shadow";
+        document.getElementById('tabLoginBtn').className = "flex-1 py-1.5 text-xs font-bold rounded-lg text-slate-400";
+      }
+    }
+
+    document.getElementById('regRole').addEventListener('change', (e) => {
+      document.getElementById('regSubjectGroup').classList.toggle('hidden', e.target.value !== 'teacher');
+    });
+
+    function handleLogin(e) {
+      e.preventDefault();
+      const role = document.getElementById('loginRole').value;
+      const username = document.getElementById('loginUsername').value.trim();
+      const password = document.getElementById('loginPassword').value.trim();
+
+      const users = getUsers();
+      const user = users.find(u => u.username.toLowerCase() === username.toLowerCase() && u.password === password && u.role === role);
+
+      if (!user) { alert("Hatalı kullanıcı adı, şifre veya rol seçimi!"); return; }
+      if (!user.approved) { alert("Hesabınız Admin tarafından henüz onaylanmamış!"); return; }
+
+      loginUser(user);
+    }
+
+    function handleRegister(e) {
+      e.preventDefault();
+      const role = document.getElementById('regRole').value;
+      const name = document.getElementById('regFullName').value.trim();
+      const username = document.getElementById('regUsername').value.trim();
+      const password = document.getElementById('regPassword').value.trim();
+      const subject = document.getElementById('regSubject').value;
+
+      const users = getUsers();
+      if (users.some(u => u.username === username)) { alert("Bu kullanıcı adı alınmış!"); return; }
+
+      users.push({ username, password, name, role, subject: role === 'teacher' ? subject : null, approved: false });
+      saveUsers(users);
+      alert("Başvurunuz alındı. Admin onayladıktan sonra giriş yapabilirsiniz.");
+      switchAuthTab('login');
+    }
+
+    function loginUser(user) {
+      currentUser = user;
+      document.getElementById('authSection').classList.add('hidden');
+      document.getElementById('dashboardSection').classList.remove('hidden');
+      document.getElementById('userBadge').classList.remove('hidden');
+      document.getElementById('badgeName').innerText = user.name;
+      renderDashboard();
+    }
+
+    function logout() {
+      currentUser = null;
+      document.getElementById('authSection').classList.remove('hidden');
+      document.getElementById('dashboardSection').classList.add('hidden');
+      document.getElementById('userBadge').classList.add('hidden');
+    }
+
+    function renderDashboard() {
+      document.querySelectorAll('.dashboard-view').forEach(el => el.classList.add('hidden'));
+
+      if (currentUser.role === 'student') {
+        document.getElementById('viewStudent').classList.remove('hidden');
+        renderStudentParentView();
+      } else if (currentUser.role === 'teacher') {
+        document.getElementById('viewTeacher').classList.remove('hidden');
+        renderTeacherView();
+      } else if (currentUser.role === 'admin') {
+        document.getElementById('viewAdmin').classList.remove('hidden');
+        renderAdminView();
+      }
+    }
+
+    function renderStudentParentView() {
+      const students = getStudents().filter(s => s.parentUsername === currentUser.username);
+      const container = document.getElementById('parentStudentSelector');
+      container.innerHTML = '';
+
+      if (students.length === 0) {
+        container.innerHTML = `<p class="text-xs text-slate-400">Bağlı öğrenci yok.</p>`;
+        return;
+      }
+
+      if (!selectedStudentId) selectedStudentId = students[0].id;
+
+      students.forEach(st => {
+        container.innerHTML += `
+          <button onclick="selectedStudentId='${st.id}'; renderStudentParentView();" class="px-3 py-1.5 rounded-xl text-xs font-bold ${st.id === selectedStudentId ? 'bg-amber-500 text-slate-950' : 'bg-slate-900 text-slate-300 border border-slate-800'}">
+            👨‍🎓 ${st.name}
+          </button>
+        `;
+      });
+
+      const gradesData = getGrades()[selectedStudentId] || [];
+      const tbody = document.getElementById('studentGradesTable');
+      tbody.innerHTML = '';
+
+      gradesData.forEach(item => {
+        const avg = Math.round((item.exam1 + item.exam2 + item.verbal) / 3);
+        tbody.innerHTML += `
+          <tr>
+            <td class="py-2 px-2 font-bold text-white">${item.subject}</td>
+            <td class="py-2 px-1 text-center">${item.exam1}</td>
+            <td class="py-2 px-1 text-center">${item.exam2}</td>
+            <td class="py-2 px-1 text-center">${item.verbal}</td>
+            <td class="py-2 px-1 text-center font-black ${avg >= 50 ? 'text-emerald-400' : 'text-red-400'}">${avg}</td>
+          </tr>
+        `;
+      });
+
+      const commentsData = getComments()[selectedStudentId] || [];
+      const cList = document.getElementById('studentCommentsList');
+      cList.innerHTML = commentsData.map(c => `
+        <div class="bg-slate-900 p-2 rounded-xl border border-slate-800">
+          <span class="text-[10px] font-bold text-amber-400">${c.author}</span>
+          <p class="text-slate-200 mt-0.5">${c.text}</p>
+        </div>
+      `).join('');
+    }
+
+    function renderTeacherView() {
+      const students = getStudents();
+      const gradesData = getGrades();
+      const subject = currentUser.subject || 'Genel';
+      const tbody = document.getElementById('teacherStudentsTable');
+      tbody.innerHTML = '';
+
+      students.forEach(student => {
+        const studentGrades = gradesData[student.id] || [];
+        let g = studentGrades.find(x => x.subject === subject) || { subject, exam1: 0, exam2: 0, verbal: 0 };
+
+        tbody.innerHTML += `
+          <tr>
+            <td class="py-2 px-2 font-bold text-white">${student.name}</td>
+            <td class="py-2 px-1 text-center">
+              <button onclick="takeAttendance('${student.id}')" class="bg-red-500/20 text-red-300 px-1.5 py-0.5 rounded text-[9px] font-bold">+1 Dev.</button>
+            </td>
+            <td class="py-2 px-1 text-center"><input type="number" id="e1_${student.id}" value="${g.exam1}" class="w-8 bg-slate-900 border border-slate-700 text-center rounded p-1 text-white"></td>
+            <td class="py-2 px-1 text-center"><input type="number" id="e2_${student.id}" value="${g.exam2}" class="w-8 bg-slate-900 border border-slate-700 text-center rounded p-1 text-white"></td>
+            <td class="py-2 px-1 text-center"><input type="number" id="v_${student.id}" value="${g.verbal}" class="w-8 bg-slate-900 border border-slate-700 text-center rounded p-1 text-white"></td>
+            <td class="py-2 px-1 text-center">
+              <button onclick="saveTeacherGrade('${student.id}')" class="bg-amber-500 text-slate-950 font-black px-1.5 py-0.5 rounded text-[9px]">Kaydet</button>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    function takeAttendance(id) {
+      const grades = getGrades();
+      if (!grades[id]) grades[id] = [];
+      const subject = currentUser.subject || 'Genel';
+      let item = grades[id].find(g => g.subject === subject);
+      if (!item) { item = { subject, exam1: 0, exam2: 0, verbal: 0, ozursuz: 0 }; grades[id].push(item); }
+      item.ozursuz = (item.ozursuz || 0) + 1;
+      saveGrades(grades);
+      alert("Devamsızlık eklendi.");
+    }
+
+    function saveTeacherGrade(id) {
+      const grades = getGrades();
+      if (!grades[id]) grades[id] = [];
+      const subject = currentUser.subject || 'Genel';
+      let item = grades[id].find(g => g.subject === subject);
+
+      if (!item) { item = { subject, exam1: 0, exam2: 0, verbal: 0, ozursuz: 0 }; grades[id].push(item); }
+
+      item.exam1 = parseInt(document.getElementById(`e1_${id}`).value) || 0;
+      item.exam2 = parseInt(document.getElementById(`e2_${id}`).value) || 0;
+      item.verbal = parseInt(document.getElementById(`v_${id}`).value) || 0;
+
+      saveGrades(grades);
+      alert("Notlar kaydedildi!");
+    }
+
+    function saveSchoolSettings() {
+      saveSchool({
+        name: document.getElementById('adminInputSchoolName').value.trim(),
+        notice: document.getElementById('adminInputSchoolNotice').value.trim()
+      });
+      alert("Okul bilgileri güncellendi!");
+    }
+
+    function renderAdminView() {
+      const school = getSchool();
+      document.getElementById('adminInputSchoolName').value = school.name;
+      document.getElementById('adminInputSchoolNotice').value = school.notice;
+
+      const users = getUsers();
+      const pendingTbody = document.getElementById('adminPendingTable');
+      const pendingUsers = users.filter(u => !u.approved);
+
+      pendingTbody.innerHTML = pendingUsers.length === 0 
+        ? `<tr><td colspan="2" class="py-2 text-center text-slate-500">Bekleyen üye yok.</td></tr>`
+        : pendingUsers.map(u => `
+          <tr>
+            <td class="py-2 px-2 font-bold text-white">${u.name} (${u.role})</td>
+            <td class="py-2 px-1 text-right space-x-1">
+              <button onclick="approveUser('${u.username}', true)" class="bg-emerald-600 text-white px-2 py-0.5 rounded text-[10px]">Onayla</button>
+              <button onclick="approveUser('${u.username}', false)" class="bg-red-600 text-white px-2 py-0.5 rounded text-[10px]">Reddet</button>
+            </td>
+          </tr>
+        `).join('');
+
+      const usersTbody = document.getElementById('adminUsersTable');
+      usersTbody.innerHTML = users.map(u => `
+        <tr>
+          <td class="py-2 px-2 font-bold text-white">${u.name}</td>
+          <td class="py-2 px-1 text-slate-400 uppercase text-[9px] font-bold">${u.role}</td>
+          <td class="py-2 px-1 font-mono font-bold text-amber-400">${u.password}</td>
+          <td class="py-2 px-1 text-center">
+            ${u.username !== currentUser.username ? `<button onclick="loginUser(getUsers().find(x=>x.username==='${u.username}'))" class="bg-amber-500 text-slate-950 text-[9px] font-black px-2 py-0.5 rounded">Giriş Yap</button>` : '<span class="text-[9px] text-slate-500">Aktif</span>'}
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function approveUser(username, isApproved) {
+      let users = getUsers();
+      if (isApproved) users = users.map(u => u.username === username ? { ...u, approved: true } : u);
+      else users = users.filter(u => u.username !== username);
+      saveUsers(users);
+      renderAdminView();
+    }
+  </script>
+</body>
+</html>
